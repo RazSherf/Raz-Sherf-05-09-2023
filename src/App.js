@@ -1,10 +1,13 @@
-import './App.css';
-import Header from './components/Header';
+import {  Route,Routes } from 'react-router-dom';
+import Home from './pages/Home';
+import Favorite from './pages/Favorite';
+
 function App() {
   return (
-    <div>
-      <Header/>
-    </div>
+    <Routes>
+      <Route path='/' element={<Home/>}></Route>
+      <Route path='/fav' element={<Favorite/>}></Route>
+    </Routes>
   );
 }
 
