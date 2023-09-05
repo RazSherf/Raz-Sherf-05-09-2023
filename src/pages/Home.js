@@ -1,52 +1,101 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import '../pages/home.css'
 import { TextField, InputAdornment, Container, Box } from '@mui/material';
 import SearchIcon from "@mui/icons-material/Search";
 import axios from 'axios';
+import { Autocomplete } from '@mui/material';
+
 // import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 
 
 const Home = () => {
 
   const [citySearch, setCitySearch] = useState('')
-  const apiKey = 'eyvGn4yVUxjAxUUXRtMTp9UfmOxboAyt'
-  // const locationKey ='New York'
-  const apiUrl = `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${citySearch}?apikey=${apiKey}`
+  const [forcast, setForcast] = useState([])
+  const[localized,setLocalized] = useState([])
+  const apiKey = 'M1V6zLFuRR1OsStZJ6G3JXATeI7eXfjO'
 
-  const handleChange = (e) => {
-    setCitySearch(e.target.value)
+  const handleChange = (event, newValue) => {
+    setCitySearch(newValue)
+  }
+  const handleAutoCompleteChange = (event,newValue) =>{
+    console.log(newValue);
+    setCitySearch(newValue)
   }
 
-  const fetchWeather = async () => {
-    try{
+  useEffect(() => {
+  
+    if (!citySearch || citySearch?.length < 3) return;
+    fetchWithAutoComplete(citySearch)
+
+  }, [citySearch])
+
+
+
+  useEffect(() => {
+    if (!forcast) return;
+    console.log(forcast)
+  }, [forcast])
+
+
+  const fetchLocation = async () => {
+    try {
+      const locationKeyUrl = `http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${apiKey}&q=${citySearch}`
+      const response = await axios.get(locationKeyUrl)
+      const data = await response.data
+      const LocationKey = data[0].Key;
+      await fetchWeather(LocationKey)
+
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const fetchWeather = async (locationKey) => {
+    try {
+      const apiUrl = `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationKey}?apikey=${apiKey}`
       const response = await axios.get(apiUrl)
       const data = await response.data
-      console.log(data);
+      setForcast(data.DailyForecasts)
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
-    }catch(e){
+  const fetchWithAutoComplete = async (citySearch) => {
+    try {
+      const apiUrl = `http://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=eyvGn4yVUxjAxUUXRtMTp9UfmOxboAyt&q=${citySearch}`
+      const response = await axios.get(apiUrl)
+      const data = await response.data
+      const LocalizedOptions = data.map((autoCompleteCity) => {
+        return autoCompleteCity.LocalizedName
+      })
+      setLocalized(LocalizedOptions)
+      // console.log(data[]);
+    } catch (e) {
       console.log(e);
     }
   }
 
   return (
-    <Container maxWidth ="lg">
-      <Box display={'flex'} justifyContent={'center'} alignContent={'center'} sx={{marginTop:5}}>
-        <TextField
-          id="search"
-          type="search"
-          label="Search City/Location"
-          onChange={handleChange}
-          sx={{ width: 600 }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <SearchIcon onClick={fetchWeather} />
-              </InputAdornment>
-            ),
-          }}
+
+    <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} width={"100%"} height={"100%"} alignContent={'center'}>
+      <Box display={'flex'} justifyContent={'center'} sx={{ marginTop: 5 }}>
+        <Autocomplete
+          disablePortal
+          value={citySearch}
+          onInputChange={handleChange}
+          onChange={handleAutoCompleteChange}
+          id="combo-box-demo"
+          options={localized}
+          sx={{ width: 300 }}
+          //renderInput={(params) => <TextField {...params} label="Search City/Location" />}
+          renderInput={(params) => <TextField {...params} label="Search City/Location" />}
         />
+        <button onClick={fetchLocation} > Search for forecast</button>
       </Box>
-    </Container>
+    </Box>
+
 
   )
 }
