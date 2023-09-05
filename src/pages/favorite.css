@@ -1,0 +1,10 @@
+
+
+.favorite_card{
+    display: flex;
+    border: solid black 1px;
+    width: 40%;
+    height: 30%;
+    justify-content: center;
+    flex-direction: row;
+}

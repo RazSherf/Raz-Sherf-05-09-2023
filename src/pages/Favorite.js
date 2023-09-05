@@ -1,10 +1,16 @@
 import React from 'react'
+import '../pages/favorite.css'
+import { Container, Box } from '@mui/material';
 
 const Favorite = () => {
   return (
-    <div>
-      <p>Fav</p>
-    </div>
+    <Container>
+    <Box display={'flex'}
+    justifyContent={'center'}>
+       
+      <p>Hello</p>
+    </Box>
+    </Container>
   )
 }
 
