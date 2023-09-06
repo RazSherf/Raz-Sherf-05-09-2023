@@ -6,6 +6,7 @@ import { removeCityFromFavorites } from '../../favoritesSlice';
 import styles from './FavoriteCityDetails.module.css';
 import getWeatherIconLink from '../../utils';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const currentWeatherDefault = {
     LocalObservationDateTime: '2023-09-06T12:13:00+03:00',
@@ -33,11 +34,15 @@ const FavoriteCityDetails = ({ city }) => {
     const dispatch = useDispatch();
 
     const getCurrentWeather = async () => {
-        // const apiUrl = `http://dataservice.accuweather.com/currentconditions/v1/${city.Key}?apikey=${apiKey}`;
-        // const response = await axios.get(apiUrl);
-        // const data = await response.data;
-        // setCurrentWeather(data[0]);
-        setCurrentWeather(currentWeatherDefault);
+        try {
+            // const apiUrl = `http://dataservice.accuweather.com/currentconditions/v1/${city.Key}?apikey=${apiKey}`;
+            // const response = await axios.get(apiUrl);
+            // const data = await response.data;
+            // setCurrentWeather(data[0]);
+            setCurrentWeather(currentWeatherDefault);
+        } catch (e) {
+            toast.error("Oops, something went wrong");
+        }
     };
 
     useEffect(() => {
@@ -46,6 +51,7 @@ const FavoriteCityDetails = ({ city }) => {
 
     const removeFromFavorites = (city) => {
         dispatch(removeCityFromFavorites(city));
+        toast.success('Successfully removed!')
     };
 
     return (

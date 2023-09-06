@@ -5,6 +5,7 @@ import Header from './components/Header';
 import { useEffect } from 'react';
 // import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 // import { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 function App() {
   useEffect(() => {
@@ -21,6 +22,9 @@ function App() {
         <Route path='/' element={<Home />}></Route>
         <Route path='/fav' element={<Favorite />}></Route>
       </Routes>
+      <Toaster
+        position="top-center"
+      />
     </div>
   );
 }

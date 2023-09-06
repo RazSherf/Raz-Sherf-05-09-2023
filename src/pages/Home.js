@@ -8,6 +8,7 @@ import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import { useSelector, useDispatch } from 'react-redux';
 import { addCityToFavorites, removeCityFromFavorites, setFavorites } from '../favoritesSlice';
 import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
+import toast from 'react-hot-toast';
 
 const locationsArray = [
   {
@@ -318,7 +319,7 @@ const Home = () => {
       const localizedOptions = locationsArray;
       setLocalized(localizedOptions)
     } catch (e) {
-      console.log(e);
+      toast.error("Oops, something went wrong");
     }
   }
 
@@ -330,7 +331,7 @@ const Home = () => {
       // setSelectedCity(data[0]);
       setSelectedCity(telAvivLocation);
     } catch (e) {
-      console.log(e);
+      toast.error("Oops, something went wrong");
     }
   }
 
@@ -357,7 +358,7 @@ const Home = () => {
       // setFiveDayForecasts(data.DailyForecasts);
       setFiveDayForecasts(forecasts);
     } catch (e) {
-      console.log(e);
+      toast.error("Oops, something went wrong");
     }
   }
 
@@ -380,9 +381,11 @@ const Home = () => {
     const favoriteIndex = favoriteCities.findIndex((c) => c.Key === city.Key);
     if (favoriteIndex !== -1) {
       dispatch(removeCityFromFavorites(city));
+      toast.success('Successfully removed!')
     }
     else {
       dispatch(addCityToFavorites(city));
+      toast.success('Successfully Added!')
     }
   };
 
