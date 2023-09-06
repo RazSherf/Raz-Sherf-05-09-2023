@@ -5,6 +5,8 @@ import DailyWeatherInfo from '../components/DailyWeatherInfo/DailyWeatherInfo';
 import '../pages/home.css';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
+import { useSelector, useDispatch } from 'react-redux';
+import { addCityToFavorites, removeCityFromFavorites } from '../favoritesSlice';
 
 const locationsArray = [
   {
@@ -281,11 +283,15 @@ const telAvivLocation = {
 };
 
 const Home = () => {
-  const [citySearch, setCitySearch] = useState('')
+  const [citySearch, setCitySearch] = useState('');
   const [selectedCity, setSelectedCity] = useState(null);
-  const [fiveDayForecasts, setFiveDayForecasts] = useState([])
-  const [localized, setLocalized] = useState([])
-  const apiKey = 'M1V6zLFuRR1OsStZJ6G3JXATeI7eXfjO'
+  const [fiveDayForecasts, setFiveDayForecasts] = useState([]);
+  const [localized, setLocalized] = useState([]);
+  const apiKey = 'M1V6zLFuRR1OsStZJ6G3JXATeI7eXfjO';
+  const favoriteCities = useSelector((state) => state.favorites.favoriteCities);
+  console.log('favoriteCities', favoriteCities);
+  const dispatch = useDispatch();
+  const isFavorite = favoriteCities.find((city) => city.Key === selectedCity.Key);
 
   const handleChange = (event, newValue) => {
     console.log('newValue', newValue);
@@ -294,6 +300,22 @@ const Home = () => {
   const handleAutoCompleteChange = (event, newValue) => {
     console.log(newValue);
     setSelectedCity(newValue);
+  }
+
+  const fetchWithAutoComplete = async (citySearch) => {
+    try {
+      // const apiUrl = `http://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=${apiKey}&q=${citySearch}`
+      // const response = await axios.get(apiUrl);
+      // const data = await response.data;
+      // console.log(data);
+      // const LocalizedOptions = data.map((autoCompleteCity) => {
+      //   return autoCompleteCity.LocalizedName
+      // })
+      const localizedOptions = locationsArray;
+      setLocalized(localizedOptions)
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   const fetchDefaultLocation = async () => {
@@ -319,12 +341,6 @@ const Home = () => {
 
   }, [citySearch])
 
-  useEffect(() => {
-    if (selectedCity) {
-      fetchWeather(selectedCity.Key);
-    }
-  }, [selectedCity]);
-
   const fetchWeather = async (locationKey) => {
     try {
       // const apiUrl = `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationKey}?apikey=${apiKey}&metric=true`;
@@ -337,21 +353,21 @@ const Home = () => {
     }
   }
 
-  const fetchWithAutoComplete = async (citySearch) => {
-    try {
-      // const apiUrl = `http://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=${apiKey}&q=${citySearch}`
-      // const response = await axios.get(apiUrl);
-      // const data = await response.data;
-      // console.log(data);
-      // const LocalizedOptions = data.map((autoCompleteCity) => {
-      //   return autoCompleteCity.LocalizedName
-      // })
-      const localizedOptions = locationsArray;
-      setLocalized(localizedOptions)
-    } catch (e) {
-      console.log(e);
+  useEffect(() => {
+    if (selectedCity) {
+      fetchWeather(selectedCity.Key);
     }
-  }
+  }, [selectedCity]);
+
+  const onLike = (city) => {
+    const favoriteIndex = favoriteCities.findIndex((c) => c.Key === city.Key);
+    if (favoriteIndex !== -1) {
+      dispatch(removeCityFromFavorites(city));
+    }
+    else {
+      dispatch(addCityToFavorites(city));
+    }
+  };
 
   return (
     <div>
@@ -381,11 +397,9 @@ const Home = () => {
               backgroundColor: 'red', ":hover": {
                 backgroundColor: 'red',
               }
-            }} className='likeButton' onClick={() => alert('add to fav')}>
-              <FavoriteBorderOutlinedIcon />
+            }} className='likeButton' onClick={() => onLike(selectedCity)}>
+              {isFavorite ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />}
             </Fab>
-            {/* <FavoriteBorderOutlinedIcon /> */}
-            {/* <FavoriteOutlinedIcon sx={{color: 'red'}} /> */}
           </div>
           <div className='forecastsContainer'>
             {fiveDayForecasts.map((dayForecast) => (
