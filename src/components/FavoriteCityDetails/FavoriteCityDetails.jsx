@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { removeCityFromFavorites } from '../../favoritesSlice';
 import styles from './FavoriteCityDetails.module.css';
+import getWeatherIconLink from '../../utils';
+import axios from 'axios';
 
 const currentWeatherDefault = {
     LocalObservationDateTime: '2023-09-06T12:13:00+03:00',
@@ -49,7 +51,7 @@ const FavoriteCityDetails = ({ city }) => {
     return (
         <div className={styles.container}>
             <div className={styles.cityName}>{city.LocalizedName}</div>
-            <img src="/sunny.png" alt={currentWeather?.WeatherText} />
+            <img src={getWeatherIconLink(currentWeather?.WeatherIcon)} alt={currentWeather?.WeatherText} />
             <div className={styles.subWeatherInfo}>
                 <div className={styles.temperature}>{currentWeather?.Temperature?.Metric?.Value}{currentWeather?.Temperature?.Metric?.Unit}</div>
                 <div>{currentWeather?.WeatherText}</div>
