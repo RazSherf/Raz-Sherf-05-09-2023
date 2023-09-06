@@ -1,4 +1,4 @@
-.container{
+.container {
     display: flex;
     width: 100vh;
     height: 100vh;
@@ -7,8 +7,22 @@
     background: #fff;
 }
 
-.text{
+.text {
     margin-top: 10px;
+}
+
+.selectedCityHeader {
+    margin-top: 40px;
+    font-size: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.likeButton {
+    position: absolute;
+    right: -20px;
 }
 
 .forecastsContainer {
