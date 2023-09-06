@@ -2,10 +2,18 @@ import { Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Favorite from './pages/Favorite';
 import Header from './components/Header';
+import { useEffect } from 'react';
 // import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 // import { useState } from 'react';
 
 function App() {
+  useEffect(() => {
+    const currentThemeFromLocalStorage = localStorage.getItem('currentTheme');
+    if (currentThemeFromLocalStorage === 'dark') {
+      document.querySelector("body").setAttribute("data-theme", "dark");
+    }
+  }, []);
+
   return (
     <div>
       <Header />

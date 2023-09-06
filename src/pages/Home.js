@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Fab, TextField } from '@mui/material';
+import { Autocomplete, Box, Fab, TextField, ThemeProvider, createTheme } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import DailyWeatherInfo from '../components/DailyWeatherInfo/DailyWeatherInfo';
@@ -294,6 +294,7 @@ const Home = () => {
   console.log('favoriteCities', favoriteCities);
   const dispatch = useDispatch();
   const isFavorite = favoriteCities.find((city) => city.Key === selectedCity?.Key);
+  const [currentTheme, setCurrentTheme] = useState(localStorage.getItem('currentTheme'));
 
   const handleChange = (event, newValue) => {
     console.log('newValue', newValue);
@@ -342,8 +343,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-
-    // if (!citySearch || citySearch?.length < 3) return;
+    // TODO: need to use debounce
     fetchWithAutoComplete(citySearch)
 
   }, [citySearch])
@@ -389,19 +389,17 @@ const Home = () => {
     <div>
       <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} width={"100%"} height={"100%"} alignContent={'center'}>
         <Box display={'flex'} justifyContent={'center'} sx={{ marginTop: 5 }}>
-          <Autocomplete
-            disablePortal
-            value={citySearch}
-            onInputChange={handleChange}
-            onChange={handleAutoCompleteChange}
-            id="combo-box-demo"
-            options={localized}
-            getOptionLabel={(option) => option?.LocalizedName || ''}
-            sx={{ width: 300 }}
-            //renderInput={(params) => <TextField {...params} label="Search City/Location" />}
-            renderInput={(params) => <TextField {...params} label="Search City/Location" />}
-          />
-          {/* <button onClick={fetchLocation} > Search for forecast</button> */}
+            <Autocomplete
+              disablePortal
+              value={citySearch}
+              onInputChange={handleChange}
+              onChange={handleAutoCompleteChange}
+              id="combo-box-demo"
+              options={localized}
+              getOptionLabel={(option) => option?.LocalizedName || ''}
+              sx={{ width: 300 }}
+              renderInput={(params) => <TextField {...params} label="Search City/Location" />}
+            />
         </Box>
       </Box>
       {selectedCity && (

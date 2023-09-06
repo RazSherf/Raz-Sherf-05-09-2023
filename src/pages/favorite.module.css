@@ -1,5 +1,16 @@
-.favoritesContainer {
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
     margin-top: 40px;
+}
+
+.header {
+    font-size: 32px;
+    text-align: center;
+}
+
+.favoritesContainer {
     display: flex;
     justify-content: center;
     gap: 40px;
