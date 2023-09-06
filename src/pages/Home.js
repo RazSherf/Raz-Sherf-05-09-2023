@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, Fab, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, Fab, TextField, ThemeProvider, createTheme } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import DailyWeatherInfo from '../components/DailyWeatherInfo/DailyWeatherInfo';
@@ -297,6 +297,34 @@ const Home = () => {
   const dispatch = useDispatch();
   const isFavorite = favoriteCities.find((city) => city.Key === selectedCity?.Key);
   const [unit, setUnit] = useState('C');
+  const [theme, setTheme] = useState(createTheme({
+    palette: {
+      mode: localStorage.getItem('currentTheme') === 'dark' ? "dark" : "light"
+    }
+  }));
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setTheme((prevValue) => {
+        if (prevValue.palette.mode === localStorage.getItem('currentTheme')) {
+          return prevValue;
+        }
+        let newTheme = 'dark';
+        if (prevValue.palette.mode === 'dark') {
+          newTheme = 'light';
+        }
+        return createTheme({
+          palette: {
+            mode: newTheme,
+          }
+        });
+      });
+    });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => {
+      observer.disconnect();
+    }
+  }, []);
 
   const handleChange = (event, newValue) => {
     console.log('newValue', newValue);
@@ -407,17 +435,19 @@ const Home = () => {
     <div>
       <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} width={"100%"} height={"100%"} alignContent={'center'}>
         <Box display={'flex'} justifyContent={'center'} sx={{ marginTop: 5 }}>
-          <Autocomplete
-            disablePortal
-            value={citySearch}
-            onInputChange={handleChange}
-            onChange={handleAutoCompleteChange}
-            id="combo-box-demo"
-            options={localized}
-            getOptionLabel={(option) => option?.LocalizedName || ''}
-            sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Search City/Location" />}
-          />
+          <ThemeProvider theme={theme}>
+            <Autocomplete
+              disablePortal
+              value={citySearch}
+              onInputChange={handleChange}
+              onChange={handleAutoCompleteChange}
+              id="combo-box-demo"
+              options={localized}
+              getOptionLabel={(option) => option?.LocalizedName || ''}
+              sx={{ width: 300 }}
+              renderInput={(params) => <TextField {...params} label="Search City/Location" />}
+            />
+          </ThemeProvider>
         </Box>
       </Box>
       {selectedCity && (
