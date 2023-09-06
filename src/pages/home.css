@@ -10,3 +10,11 @@
 .text{
     margin-top: 10px;
 }
+
+.forecastsContainer {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
