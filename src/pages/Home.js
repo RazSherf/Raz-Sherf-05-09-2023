@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Fab, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, Fab, TextField } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import DailyWeatherInfo from '../components/DailyWeatherInfo/DailyWeatherInfo';
@@ -7,6 +7,7 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import { useSelector, useDispatch } from 'react-redux';
 import { addCityToFavorites, removeCityFromFavorites, setFavorites } from '../favoritesSlice';
+import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
 
 const locationsArray = [
   {
@@ -294,6 +295,7 @@ const Home = () => {
   console.log('favoriteCities', favoriteCities);
   const dispatch = useDispatch();
   const isFavorite = favoriteCities.find((city) => city.Key === selectedCity?.Key);
+  const [unit, setUnit] = useState('C');
 
   const handleChange = (event, newValue) => {
     console.log('newValue', newValue);
@@ -384,6 +386,20 @@ const Home = () => {
     }
   };
 
+  const changeUnits = () => {
+    setUnit((prevValue) => {
+      if (prevValue === 'C') {
+        return 'F';
+      }
+      return 'C';
+    });
+  }
+
+  const celsiusToFahrenheit = (celsius) => {
+    const fahrenheit = (celsius * 9 / 5) + 32;
+    return fahrenheit;
+  }
+
   return (
     <div>
       <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} width={"100%"} height={"100%"} alignContent={'center'}>
@@ -414,13 +430,23 @@ const Home = () => {
               {isFavorite ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />}
             </Fab>
           </div>
+          <div className='unitsButton'>
+            <Button
+              component="label"
+              variant="contained"
+              startIcon={<DeviceThermostatIcon />}
+              onClick={changeUnits}
+            >
+              Change Units
+            </Button>
+          </div>
           <div className='forecastsContainer'>
             {fiveDayForecasts.map((dayForecast) => (
               <DailyWeatherInfo
                 key={dayForecast.Date}
                 day={dayForecast.Date}
-                temperature={dayForecast.Temperature.Maximum.Value}
-                unit={dayForecast.Temperature.Maximum.Unit}
+                temperature={unit === 'C' ? dayForecast.Temperature.Maximum.Value : celsiusToFahrenheit(dayForecast.Temperature.Maximum.Value).toFixed(2)}
+                unit={unit}
                 weatherCondition={dayForecast.Day.IconPhrase}
                 weatherIconNumber={dayForecast.Day.Icon}
               />

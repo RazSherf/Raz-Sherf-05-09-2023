@@ -25,6 +25,11 @@
     right: -20px;
 }
 
+.unitsButton {
+    text-align: center;
+    margin-top: 20px;
+}
+
 .forecastsContainer {
     margin-top: 40px;
     display: flex;
