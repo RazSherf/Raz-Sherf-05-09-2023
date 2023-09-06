@@ -58,7 +58,7 @@ const Home = () => {
 
   const fetchWithAutoComplete = debounce(async (citySearch) => {
     try {
-      const apiUrl = `http://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=${process.env.REACT_APP_API_KEY}&q=${citySearch}`
+      const apiUrl = `https://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=${process.env.REACT_APP_API_KEY}&q=${citySearch}`
       const response = await axios.get(apiUrl);
       const data = await response.data;
       const localizedOptions = data.map((autoCompleteCity) => {
@@ -72,7 +72,7 @@ const Home = () => {
 
   const fetchDefaultLocation = async () => {
     try {
-      const locationKeyUrl = `http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${process.env.REACT_APP_API_KEY}&q=TelAviv`;
+      const locationKeyUrl = `https://dataservice.accuweather.com/locations/v1/cities/search?apikey=${process.env.REACT_APP_API_KEY}&q=TelAviv`;
       const response = await axios.get(locationKeyUrl);
       const data = await response.data;
       setSelectedCity(data[0]);
@@ -99,7 +99,7 @@ const Home = () => {
 
   const fetchLocation = async (location) => {
     try {
-      const locationKeyUrl = `http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${process.env.REACT_APP_API_KEY}&q=${location}`;
+      const locationKeyUrl = `https://dataservice.accuweather.com/locations/v1/cities/search?apikey=${process.env.REACT_APP_API_KEY}&q=${location}`;
       const response = await axios.get(locationKeyUrl);
       const data = await response.data;
       setSelectedCity(data[0]);
@@ -117,7 +117,7 @@ const Home = () => {
         setSelectedCity(city);
         locationKeyValue = city.Key;
       }
-      const apiUrl = `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationKeyValue}?apikey=${process.env.REACT_APP_API_KEY}&metric=true`;
+      const apiUrl = `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationKeyValue}?apikey=${process.env.REACT_APP_API_KEY}&metric=true`;
       const response = await axios.get(apiUrl);
       const data = await response.data;
       setFiveDayForecasts(data.DailyForecasts);
