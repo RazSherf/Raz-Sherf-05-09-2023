@@ -1,10 +1,21 @@
-
-
-.favorite_card{
+.favoritesContainer {
+    margin-top: 40px;
     display: flex;
-    border: solid black 1px;
-    width: 40%;
-    height: 30%;
     justify-content: center;
-    flex-direction: row;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.emptyFavorites {
+    font-size: 22px;
+    text-align: center;
+}
+
+.homeRef {
+    color: blue;
+    text-decoration: none;
+}
+
+.homeRef:hover {
+    text-decoration: underline;
 }
