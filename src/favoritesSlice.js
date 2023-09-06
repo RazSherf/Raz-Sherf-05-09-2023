@@ -13,10 +13,13 @@ const favoritesSlice = createSlice({
         },
         removeCityFromFavorites: (state, action) => {
             state.favoriteCities = state.favoriteCities.filter((city) => city.Key !== action.payload.Key);
-        }
+        },
+        setFavorites: (state, action) => {
+            state.favoriteCities = action.payload;
+        },
     }
 });
 
 
-export const { addCityToFavorites, removeCityFromFavorites } = favoritesSlice.actions;
+export const { addCityToFavorites, removeCityFromFavorites, setFavorites } = favoritesSlice.actions;
 export default favoritesSlice.reducer;

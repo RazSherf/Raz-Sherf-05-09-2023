@@ -1,16 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../pages/favorite.css'
-import { Container, Box } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
+import FavoriteCityDetails from '../components/FavoriteCityDetails/FavoriteCityDetails';
+import { setFavorites } from '../favoritesSlice';
 
 const Favorite = () => {
+  const favoriteCities = useSelector((state) => state.favorites.favoriteCities);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const favoriteCitiesFromLocalStorage = JSON.parse(localStorage.getItem('favoriteCities'));
+    dispatch(setFavorites(favoriteCitiesFromLocalStorage));
+  }, []);
+
   return (
-    <Container>
-    <Box display={'flex'}
-    justifyContent={'center'}>
-       
-      <p>Hello</p>
-    </Box>
-    </Container>
+    <div>
+      {favoriteCities.map((city) => (
+        <FavoriteCityDetails key={city.Key} name={city.LocalizedName} locationKey={city.Key} />
+      ))}
+    </div>
   )
 }
 

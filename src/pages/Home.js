@@ -6,7 +6,7 @@ import '../pages/home.css';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import { useSelector, useDispatch } from 'react-redux';
-import { addCityToFavorites, removeCityFromFavorites } from '../favoritesSlice';
+import { addCityToFavorites, removeCityFromFavorites, setFavorites } from '../favoritesSlice';
 
 const locationsArray = [
   {
@@ -282,6 +282,8 @@ const telAvivLocation = {
   ]
 };
 
+let firstTime = true;
+
 const Home = () => {
   const [citySearch, setCitySearch] = useState('');
   const [selectedCity, setSelectedCity] = useState(null);
@@ -291,7 +293,7 @@ const Home = () => {
   const favoriteCities = useSelector((state) => state.favorites.favoriteCities);
   console.log('favoriteCities', favoriteCities);
   const dispatch = useDispatch();
-  const isFavorite = favoriteCities.find((city) => city.Key === selectedCity.Key);
+  const isFavorite = favoriteCities.find((city) => city.Key === selectedCity?.Key);
 
   const handleChange = (event, newValue) => {
     console.log('newValue', newValue);
@@ -335,6 +337,11 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    const favoriteCitiesFromLocalStorage = JSON.parse(localStorage.getItem('favoriteCities'));
+    dispatch(setFavorites(favoriteCitiesFromLocalStorage || []));
+  }, []);
+
+  useEffect(() => {
 
     // if (!citySearch || citySearch?.length < 3) return;
     fetchWithAutoComplete(citySearch)
@@ -358,6 +365,15 @@ const Home = () => {
       fetchWeather(selectedCity.Key);
     }
   }, [selectedCity]);
+
+  useEffect(() => {
+    if (firstTime) {
+      firstTime = false;
+      return;
+    }
+    const favoriteCitiesString = JSON.stringify(favoriteCities);
+    localStorage.setItem('favoriteCities', favoriteCitiesString);
+  }, [favoriteCities]);
 
   const onLike = (city) => {
     const favoriteIndex = favoriteCities.findIndex((c) => c.Key === city.Key);
