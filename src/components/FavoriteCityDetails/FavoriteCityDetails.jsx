@@ -8,15 +8,13 @@ import getWeatherIconLink from '../../utils';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const apiKey = 'VJ1P10PVafELdhJ0gQIlijAhoVBi2OAB';
-
 const FavoriteCityDetails = ({ city }) => {
     const [currentWeather, setCurrentWeather] = useState(null);
     const dispatch = useDispatch();
 
     const getCurrentWeather = async () => {
         try {
-            const apiUrl = `http://dataservice.accuweather.com/currentconditions/v1/${city.Key}?apikey=${apiKey}`;
+            const apiUrl = `http://dataservice.accuweather.com/currentconditions/v1/${city.Key}?apikey=${process.env.REACT_APP_API_KEY}`;
             const response = await axios.get(apiUrl);
             const data = await response.data;
             setCurrentWeather(data[0]);
