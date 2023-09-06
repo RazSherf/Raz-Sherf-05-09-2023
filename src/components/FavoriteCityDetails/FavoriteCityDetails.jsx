@@ -14,7 +14,7 @@ const FavoriteCityDetails = ({ city }) => {
 
     const getCurrentWeather = async () => {
         try {
-            const apiUrl = `http://dataservice.accuweather.com/currentconditions/v1/${city.Key}?apikey=${process.env.REACT_APP_API_KEY}`;
+            const apiUrl = `https://dataservice.accuweather.com/currentconditions/v1/${city.Key}?apikey=${process.env.REACT_APP_API_KEY}`;
             const response = await axios.get(apiUrl);
             const data = await response.data;
             setCurrentWeather(data[0]);
