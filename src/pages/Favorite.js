@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-// import '../pages/favorite.css'
 import { useSelector, useDispatch } from 'react-redux';
 import FavoriteCityDetails from '../components/FavoriteCityDetails/FavoriteCityDetails';
 import { setFavorites } from '../favoritesSlice';

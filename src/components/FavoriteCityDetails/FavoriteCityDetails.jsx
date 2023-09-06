@@ -8,38 +8,18 @@ import getWeatherIconLink from '../../utils';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const currentWeatherDefault = {
-    LocalObservationDateTime: '2023-09-06T12:13:00+03:00',
-    EpochTime: 1693991580,
-    WeatherText: 'Sunny',
-    WeatherIcon: 1,
-    HasPrecipitation: false,
-    PrecipitationType: null,
-    IsDayTime: true,
-    Temperature: {
-        Metric: { Value: 32.6, Unit: 'C', UnitType: 17 },
-        Imperial: { Value: 91, Unit: 'F', UnitType: 18 }
-    },
-    MobileLink:
-        'http://www.accuweather.com/en/il/tel-aviv/215854/current-weather/215854?lang=en-us',
-    Link:
-        'http://www.accuweather.com/en/il/tel-aviv/215854/current-weather/215854?lang=en-us'
-};
-
-const apiKey = 'M1V6zLFuRR1OsStZJ6G3JXATeI7eXfjO';
+const apiKey = 'VJ1P10PVafELdhJ0gQIlijAhoVBi2OAB';
 
 const FavoriteCityDetails = ({ city }) => {
     const [currentWeather, setCurrentWeather] = useState(null);
-    console.log(currentWeather);
     const dispatch = useDispatch();
 
     const getCurrentWeather = async () => {
         try {
-            // const apiUrl = `http://dataservice.accuweather.com/currentconditions/v1/${city.Key}?apikey=${apiKey}`;
-            // const response = await axios.get(apiUrl);
-            // const data = await response.data;
-            // setCurrentWeather(data[0]);
-            setCurrentWeather(currentWeatherDefault);
+            const apiUrl = `http://dataservice.accuweather.com/currentconditions/v1/${city.Key}?apikey=${apiKey}`;
+            const response = await axios.get(apiUrl);
+            const data = await response.data;
+            setCurrentWeather(data[0]);
         } catch (e) {
             toast.error("Oops, something went wrong");
         }
