@@ -171,17 +171,7 @@ const Home = () => {
     <div>
       <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} width={"100%"} height={"100%"} alignContent={'center'}>
         <Box display={'flex'} justifyContent={'center'} sx={{ marginTop: 5 }}>
-          <ThemeProvider theme={theme}>
-            <Autocomplete
-              disablePortal
-              value={citySearch}
-              onChange={handleAutoCompleteChange}
-              id="combo-box-demo"
-              options={localized}
-              sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="Search City/Location" onChange={(e) => setCitySearch(e.target.value)} />}
-            />
-          </ThemeProvider>
+         
         </Box>
       </Box>
       {selectedCity && (
