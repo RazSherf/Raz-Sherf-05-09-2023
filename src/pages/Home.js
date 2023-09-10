@@ -57,6 +57,7 @@ const Home = () => {
   }
 
   const fetchWithAutoComplete = debounce(async (citySearch) => {
+    debugger;
     try {
       const apiUrl = `https://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=${process.env.REACT_APP_API_KEY}&q=${citySearch}`
       const response = await axios.get(apiUrl);
@@ -171,6 +172,17 @@ const Home = () => {
     <div>
       <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} width={"100%"} height={"100%"} alignContent={'center'}>
         <Box display={'flex'} justifyContent={'center'} sx={{ marginTop: 5 }}>
+        <ThemeProvider theme={theme}>
+            <Autocomplete
+              disablePortal
+              value={citySearch}
+              onChange={handleAutoCompleteChange}
+              id="combo-box-demo"
+              options={localized}
+              sx={{ width: 300 }}
+              renderInput={(params) => <TextField {...params} label="Search City/Location" onChange={(e) => setCitySearch(e.target.value)} />}
+            />
+          </ThemeProvider>
          
         </Box>
       </Box>
